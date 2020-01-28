@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  build:
+docker:
+  # specify the version you desire here
+  - image: circleci/node:8.4.0
+    environment:
+      NODE_ENV: development
+      DEBUG: "*,-express*"
+      HOST: "*"
+      PORT: 8080
+      BCRYPT_SALT_ROUNDS: 10
+      TOKEN_SECRET: vkb6cgvlerc7ble78cb;r7b
+      UPLOADS_DIR: uploads/
+
+  # Specify service dependencies here if necessary
+  # CircleCI maintains a library of pre-built images
+  # documented at https://circleci.com/docs/2.0/circleci-images/
+  - image: circleci/mongo:3.4.4
+
+
+working_directory: ~/api
+
+steps:
+  - checkout
+
+  # Download and cache dependencies
+  - restore_cache:
+      keys:
+      - v1-dependencies-{{ checksum "app/package.json" }}
+      # fallback to using the latest cache if no exact match is found
+      - v1-dependencies-
+
+  - run: cd app;npm install
+
+  - save_cache:
+      paths:
+        - app/node_modules
+      key: v1-dependencies-{{ checksum "app/package.json" }}
+
+  # run tests!
+  - run: cd app;npm run circleci-test
+
+deployment:
+  dev:
+    branch: develop
+    commands:
+      - ssh ubuntu@xxx.xxx.xxx.xxx 'sudo git -C /home/app pull origin develop && sudo systemctl restart api.service'```
