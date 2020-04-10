@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Running In A Container With Python
           command: |
-            python3 *.py
+            python3 -m py_compile *.py
 
   Deploy-To-Remote:
     machine:
