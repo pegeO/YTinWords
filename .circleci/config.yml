@@ -39,12 +39,12 @@ workflows:
           type: approval
           requires:
             - Run-With-Python
-          - Deploy-To-Remote:
-              requires:
-                - Hold-For-Approval
-                filters:
-                  branches:
-                    only: test # only deploy on the test branch
-            - Now-Complete:
-                requires:
-                  - Deploy-To-Remote
+      - Deploy-To-Remote:
+          requires:
+            - Hold-For-Approval
+            filters:
+              branches:
+                only: test # only deploy on the test branch
+        - Now-Complete:
+            requires:
+              - Deploy-To-Remote
