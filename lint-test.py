@@ -1,1 +1,1 @@
-print('Test my linter)
+print('Test my linter')

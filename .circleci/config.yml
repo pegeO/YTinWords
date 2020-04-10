@@ -1,33 +1,26 @@
-version: 2.1
+version: 2
+
 jobs:
-  Hello-World:
-    docker:
-      - image: alpine:3.7
-    steps:
-      - run:
-          name: Hello World
-          command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-  I-Have-Code:
-    docker:
-      - image: alpine:3.7
-    steps:
-      - checkout
-      - run:
-          name: Code Has Arrived
-          command: |
-            ls -al
-            echo '^^^That should look familiar^^^'
+
   Run-With-Python:
     docker:
       - image: circleci/python:3.6.8
     steps:
-      - checkout
+      - checkout # get code from git
       - run:
           name: Running In A Container With Python
           command: |
             python3 *.py
+
+  Deploy-To-Remote:
+    machine:
+      enabled: true
+    steps:
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "echo jee"
+
   Now-Complete:
     docker:
       - image: alpine:3.7
@@ -39,20 +32,19 @@ jobs:
 
 workflows:
  version: 2
- Example_Workflow:
+ build-and-deploy:
    jobs:
-     - Hello-World
-     - I-Have-Code:
-         requires:
-           - Hello-World
-     - Run-With-Python:
-         requires:
-           - Hello-World
+     - Run-With-Python
      - Hold-For-Approval:
          type: approval
          requires:
            - Run-With-Python
-           - I-Have-Code
-     - Now-Complete:
+     - Deploy-To-Remote:
          requires:
            - Hold-For-Approval
+          filters:
+            branches:
+              only: test # only deploy on the test branch
+     - Now-Complete:
+         requires:
+           - Deploy-To-Remote
