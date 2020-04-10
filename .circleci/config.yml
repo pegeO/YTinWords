@@ -31,20 +31,20 @@ jobs:
             echo 'Do work once the approval has completed'
 
 workflows:
- version: 2
- build-and-deploy:
-   jobs:
-     - Run-With-Python
-     - Hold-For-Approval:
-         type: approval
-         requires:
-           - Run-With-Python
-     - Deploy-To-Remote:
-         requires:
-           - Hold-For-Approval
-          filters:
-            branches:
-              only: test # only deploy on the test branch
-     - Now-Complete:
-         requires:
-           - Deploy-To-Remote
+  version: 2
+  build-and-deploy:
+    jobs:
+      - Run-With-Python
+      - Hold-For-Approval:
+          type: approval
+          requires:
+            - Run-With-Python
+          - Deploy-To-Remote:
+              requires:
+                - Hold-For-Approval
+                filters:
+                  branches:
+                    only: test # only deploy on the test branch
+            - Now-Complete:
+                requires:
+                  - Deploy-To-Remote
