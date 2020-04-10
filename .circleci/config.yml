@@ -19,14 +19,14 @@ jobs:
           command: |
             ls -al
             echo '^^^That should look familiar^^^'
-  Run-With-Python:
+  Run-With-Node:
     docker:
-      - image: circleci/python:3.6.8
+      - image: circleci/node:10-browsers
     steps:
       - run:
-          name: Running In A Container With Python
+          name: Running In A Container With Node
           command: |
-            python3 *.py
+            node -v
   Now-Complete:
     docker:
       - image: alpine:3.7
@@ -44,13 +44,13 @@ workflows:
      - I-Have-Code:
          requires:
            - Hello-World
-     - Run-With-Python:
+     - Run-With-Node:
          requires:
            - Hello-World
      - Hold-For-Approval:
          type: approval
          requires:
-           - Run-With-Python
+           - Run-With-Node
            - I-Have-Code
      - Now-Complete:
          requires:
