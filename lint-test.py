@@ -1,1 +1,1 @@
-print('Test my CI/CD linter')
+print('Test my linter')
