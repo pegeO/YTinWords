@@ -1,0 +1,7 @@
+{% extends "layout.html"%}
+{% block content %}
+<p><img src={{ url_for('static', filename=output_file) }} class="centerImage"></p>
+<br>
+<h2>raw text</h2>
+<p> {{ sum_result }} </p>
+{% endblock content %}
