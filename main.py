@@ -17,7 +17,7 @@ import random
 import string
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'c35b23b2f61c6c6818caebe9bec6e1e9'
+# app.config['SECRET_KEY'] = 'null'
 
 #
 # TODO:
